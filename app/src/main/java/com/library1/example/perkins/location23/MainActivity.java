@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
+            @Override
             public void onLocationChanged(Location location) {
                 location.getLatitude();
                 location.getLongitude();
@@ -116,14 +117,22 @@ public class MainActivity extends AppCompatActivity {
                     //how to go the other way
                     getLocationCoordinatesFromAddress(Address1 + " " + Address2 + " ," + State + " " + Zipcode );
                 }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
 
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            @Override
+            public void onProviderEnabled(String provider) {
 
-            public void onProviderEnabled(String provider) {}
+            }
 
-            public void onProviderDisabled(String provider) {}
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
         };
 
         startListeningIfAllowed();
