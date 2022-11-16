@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +22,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView myView;
+    EditText myView;
     TextView myView2;
+
+    TextView luaddress;
+    TextView lucoords;
 
     private boolean canAccessLocation = false;
     static final int PERMS_REQ_CODE = 200;
@@ -35,37 +39,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        myView = (TextView) findViewById(R.id.textViewAddress);
+        myView = findViewById(R.id.etAddress);
         myView2 = (TextView) findViewById(R.id.textViewCoords);
+        luaddress = findViewById(R.id.luaddress);
+        lucoords = findViewById(R.id.luCoords);
+        requestPermissions(perms, PERMS_REQ_CODE);
+        setupListener();
     }
 
-    /**
-     * Dispatch onPause() to fragments.
-     */
     @Override
     protected void onPause() {
         super.onPause();
-
         stopListeningIfAllowed();
     }
 
-
     //only ask if dev is running 23 or higher
     private boolean startListeningIfAllowed(){
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP_MR1){
-            if   ((checkSelfPermission(perms[0])== PackageManager.PERMISSION_GRANTED )&& (checkSelfPermission(perms[0])==PackageManager.PERMISSION_GRANTED))
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        }
+        if   ((checkSelfPermission(perms[0])== PackageManager.PERMISSION_GRANTED )&& (checkSelfPermission(perms[0])==PackageManager.PERMISSION_GRANTED))
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         return true;
     }
-    //only ask if dev is running 23 or higher
     private boolean stopListeningIfAllowed(){
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP_MR1){
-            if   ((checkSelfPermission(perms[0])== PackageManager.PERMISSION_GRANTED )&& (checkSelfPermission(perms[0])==PackageManager.PERMISSION_GRANTED))
-                if (locationManager != null && locationListener!= null)
-                    locationManager.removeUpdates(locationListener);
-        }
+        if   ((checkSelfPermission(perms[0])== PackageManager.PERMISSION_GRANTED )&& (checkSelfPermission(perms[0])==PackageManager.PERMISSION_GRANTED))
+            if (locationManager != null && locationListener!= null)
+                locationManager.removeUpdates(locationListener);
         return true;
     }
 
@@ -100,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 location.getLongitude();
 
                 String myLocation = "Latitude = " + location.getLatitude() + " Longitude = " + location.getLongitude();
-                MainActivity.this.myView.setText(myLocation);
+                MainActivity.this.lucoords.setText(myLocation);
 
                 List<Address> geocodeMatches = MainActivity.this.getAddressFromCoordinates(location);
                 if (geocodeMatches != null && !geocodeMatches.isEmpty())
@@ -111,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     String Zipcode  = geocodeMatches.get(0).getPostalCode();
                     String Country  = geocodeMatches.get(0).getCountryName();
 
-                    MainActivity.this.myView2.setText("MY CURRENT address " + Address1 +"\n" +Address2 + "\n");
+                    MainActivity.this.luaddress.setText("MY CURRENT address " + Address1 +"\n" +Address2 + "\n");
                     //I make a log to see the results
                     Log.e("MY CURRENT address", Address1 +"\n" +Address2 + "\n");
 
@@ -135,12 +132,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-
         startListeningIfAllowed();
     }
 
     private  List<Address> getAddressFromCoordinates(Location location){
-
         List<Address> geocodeMatches = null;
         String Address1;
         String Address2;
@@ -196,11 +191,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doCoordinatesFromAddress(View view) {
-
-        requestPermissions(perms, PERMS_REQ_CODE);
-
         String address = myView.getText().toString();
-
         myView2.setText(getLocationCoordinatesFromAddress(address));
     }
+
+
 }
