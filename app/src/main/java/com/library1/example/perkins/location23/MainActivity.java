@@ -21,17 +21,13 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
     EditText myView;
     TextView myView2;
-
     TextView luaddress;
     TextView lucoords;
-
     private boolean canAccessLocation = false;
     static final int PERMS_REQ_CODE = 200;
     String[] perms = {"android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"};
-
     private LocationManager locationManager;
     LocationListener locationListener;
 
@@ -118,19 +114,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
+            public void onStatusChanged(String provider, int status, Bundle extras) { }
 
             @Override
-            public void onProviderEnabled(String provider) {
-
-            }
+            public void onProviderEnabled(String provider) { }
 
             @Override
-            public void onProviderDisabled(String provider) {
-
-            }
+            public void onProviderDisabled(String provider) { }
         };
         startListeningIfAllowed();
     }
@@ -158,9 +148,7 @@ public class MainActivity extends AppCompatActivity {
             State = geocodeMatches.get(0).getAdminArea();
             Zipcode = geocodeMatches.get(0).getPostalCode();
             Country = geocodeMatches.get(0).getCountryName();
-
-            //I make a log to see the results
-            Log.e("MY CURRENT address", Address1 +"\n" +Address2 + "\n");
+           Log.e("MY CURRENT address", Address1 +"\n" +Address2 + "\n");
         }
         return geocodeMatches;
     }
@@ -168,13 +156,9 @@ public class MainActivity extends AppCompatActivity {
     private String getLocationCoordinatesFromAddress(String address){
         double latitude = 0.0;
         double longitude = 0.0;
-
         List<Address> geocodeMatches = null;
-
         try {
-            geocodeMatches =
-                    new Geocoder(this).getFromLocationName(
-                            address, 1);
+            geocodeMatches = new Geocoder(this).getFromLocationName(address, 1);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
